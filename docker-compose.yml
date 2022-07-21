@@ -1,0 +1,24 @@
+version: '3'
+services:
+    api:
+        build: .
+        volumes:
+            - ./:/src/go-api
+        ports:
+            - '8080:8080'
+        depends_on:
+            - db
+        tty: true
+    db:
+        image: mysql:8.0
+        ports:
+            - '3306:3306'
+        volumes:
+            - ./db/mysql_init:/docker-entrypoint-initdb.d
+            - ./db/mysql_data:/var/lib/mysql
+            - ./db/config/charset.cnf:/etc/mysql/conf.d/charset.cnf
+        environment:
+            MYSQL_DATABASE: go-api
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_USER: user
+            MYSQL_PASSWORD: password
